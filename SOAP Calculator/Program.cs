@@ -26,6 +26,7 @@ namespace SOAP_Calculator
             /*
             //SOAP Body Request  
             XmlDocument SOAPReqBody = new XmlDocument();
+            SOAPReqBody.PreserveWhitespace = false;
 
             SOAPReqBody.LoadXml(@"<?xml version=""1.0"" encoding=""utf-8""?>  
             <soap:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance""
@@ -38,8 +39,12 @@ namespace SOAP_Calculator
                 </Add>  
               </soap:Body>  
             </soap:Envelope>");
+
+            Console.WriteLine("OuterXml:" + SOAPReqBody.OuterXml);
+            Console.WriteLine("InnerText:" + SOAPReqBody.InnerText); 
+            Console.WriteLine("InnerXml:" + SOAPReqBody.InnerXml); 
             */
-            
+
             string soapUrl = "http://schemas.xmlsoap.org/soap/envelope/";
             XNamespace soap = soapUrl;
 
@@ -54,7 +59,7 @@ namespace SOAP_Calculator
 
 
             XDocument SOAPReqBody = new XDocument(
-                //new XDeclaration("1.0", "utf-8", "yes"),
+                new XDeclaration("1.0", "utf-8", "yes"),
                 new XElement(soap + "Envelope",
                     new XAttribute(XNamespace.Xmlns + "soap", soapUrl),
                     new XAttribute(XNamespace.Xmlns + "xsd", xsdUrl),
@@ -68,9 +73,8 @@ namespace SOAP_Calculator
                 )
             );
 
-            SOAPReqBody.Save("Root.xml");
-
-            Console.WriteLine(File.ReadAllText("Root.xml"));
+            // SOAPReqBody.Save("Root.xml");
+            // Console.WriteLine(File.ReadAllText("Root.xml"));
 
             Console.WriteLine("ToString:" + SOAPReqBody.ToString());
             Console.WriteLine("Waiting for resp!");
