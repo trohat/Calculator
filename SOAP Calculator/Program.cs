@@ -35,6 +35,10 @@ namespace SOAP_Calculator
                 </Add>  
               </soap:Body>  
             </soap:Envelope>");
+            Console.WriteLine("OuterXml:" + SOAPReqBody.OuterXml);
+            Console.WriteLine("InnerText:" + SOAPReqBody.InnerText); 
+            Console.WriteLine("InnerXml:" + SOAPReqBody.InnerXml); 
+            Console.WriteLine("Waiting for resp!");
 
 
             using (Stream stream = request.GetRequestStream())
