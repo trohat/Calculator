@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Xml;
 using System.Xml.Linq;
@@ -22,11 +23,11 @@ namespace SOAP_Calculator
         {
             //Calling CreateSOAPWebRequest method  
             HttpWebRequest request = CreateSOAPWebRequest();
-
             /*
+            
             //SOAP Body Request  
             XmlDocument SOAPReqBody = new XmlDocument();
-            SOAPReqBody.PreserveWhitespace = false;
+            SOAPReqBody.PreserveWhitespace = true;
 
             SOAPReqBody.LoadXml(@"<?xml version=""1.0"" encoding=""utf-8""?>  
             <soap:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance""
@@ -44,7 +45,7 @@ namespace SOAP_Calculator
             Console.WriteLine("InnerText:" + SOAPReqBody.InnerText); 
             Console.WriteLine("InnerXml:" + SOAPReqBody.InnerXml); 
             */
-
+            
             string soapUrl = "http://schemas.xmlsoap.org/soap/envelope/";
             XNamespace soap = soapUrl;
 
@@ -79,7 +80,7 @@ namespace SOAP_Calculator
             Console.WriteLine("ToString:" + SOAPReqBody.ToString());
             Console.WriteLine("Waiting for resp!");
             //Console.ReadLine();
-
+            
 
             using (Stream stream = request.GetRequestStream())
             {
@@ -93,10 +94,32 @@ namespace SOAP_Calculator
                     //reading stream  
                     var ServiceResult = rd.ReadToEnd();
                     //writting stream result on console  
-                    Console.WriteLine(ServiceResult);
+
+
+
+                    WriteToConsole("Just ServiceResult", ServiceResult);
+
+                    XElement doc = XElement.Parse(ServiceResult);
+
+                    Console.WriteLine(doc);
+                    WriteToConsole("Doc from XDocument.Parse", doc.ToString());
+
+                    WriteToConsole("Just result", (string) doc
+                      //  .Element(soap + "Envelope")
+                      //  .Element(soap + "Body")
+                      //  .Element(tempUri + "AddResponse")
+                        .Descendants(tempUri + "AddResult").First());
+
                     Console.ReadLine();
                 }
             }
+        }
+
+        public void WriteToConsole(string comment, string output)
+        {
+            Console.WriteLine(comment + ":");
+            Console.WriteLine(output);
+            Console.WriteLine();
         }
 
 
